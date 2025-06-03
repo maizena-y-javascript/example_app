@@ -33,8 +33,13 @@ xhttp.send()
 var sendToServer = function (note) {
   var xhttpForPost = new XMLHttpRequest()
   xhttpForPost.onreadystatechange = function () {
-    if (this.readyState == 4 && this.status == 201) {
+    if (this.readyState !== 4) return;
+    if (this.status === 201) {
       console.log(this.responseText)
+      notes.push(note)
+      redrawNotes()
+    } else {
+      console.error("Note was not accepted:", this.responseText)
     }
   }
 
@@ -47,15 +52,13 @@ window.onload = function (e) {
   var form = document.getElementById("notes_form")
   form.onsubmit = function (e) {
     e.preventDefault()
-
+  
     var note = {
       content: e.target.elements[0].value,
       date: new Date()
     }
-
-    notes.push(note)
+  
     e.target.elements[0].value = ""
-    redrawNotes()
     sendToServer(note)
   }
 }
