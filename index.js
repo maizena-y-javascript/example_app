@@ -132,7 +132,7 @@ router.get('/data.json', (req, res) => {
 
 router.post('/new_note_spa', (req, res) => {
   if (!isValidNote(req.body)) {
-    return res.send('invalid note').status(400)
+    return res.status(400).send('invalid note')
   }
 
   createNote(formatNote(req.body))
